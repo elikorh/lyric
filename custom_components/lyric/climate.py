@@ -23,7 +23,6 @@ from homeassistant.components.climate.const import (
     FAN_DIFFUSE,
     FAN_ON,
     HVAC_MODE_COOL,
-    HVAC_MODE_FAN_ONLY,
     HVAC_MODE_HEAT,
     HVAC_MODE_HEAT_COOL,
     HVAC_MODE_OFF,
@@ -63,8 +62,8 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
     if discovery_info is None:
         return
 
-    _LOGGER.debug("climate discovery_info: %s", discovery_info)
-    _LOGGER.debug("climate config: %s", config)
+    _LOGGER.debug("climate discovery_info: %s" % discovery_info)
+    _LOGGER.debug("climate config: %s" % config)
 
     _LOGGER.debug("Set up Lyric climate platform")
 
@@ -79,7 +78,7 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
 
         entity_id = service.data.get(ATTR_ENTITY_ID)
 
-        _LOGGER.debug("resume_program_service entity_id: %s", entity_id)
+        _LOGGER.debug("resume_program_service entity_id: %s" % entity_id)
 
         if entity_id:
             target_thermostats = [
@@ -114,7 +113,6 @@ class LyricThermostat(ClimateDevice):
             "off": HVAC_MODE_OFF,
             "cool": HVAC_MODE_COOL,
             "auto": HVAC_MODE_HEAT_COOL,
-            "fan": HVAC_MODE_FAN_ONLY,
         }
 
         self._hvac_possible_modes_rev = {
@@ -122,7 +120,6 @@ class LyricThermostat(ClimateDevice):
             HVAC_MODE_OFF: "Off",
             HVAC_MODE_COOL: "Cool",
             HVAC_MODE_HEAT_COOL: "Auto",
-            HVAC_MODE_FAN_ONLY: "Fan",
         }
 
         self._hvac_possible_actions = {
@@ -233,7 +230,7 @@ class LyricThermostat(ClimateDevice):
 
     @property
     def target_temperature_low(self):
-        """Return target low temperature."""
+        """Return target low temerature."""
 
         return self._target_temperature_low
 
@@ -327,9 +324,9 @@ class LyricThermostat(ClimateDevice):
 
                 self.device.temperatureSetpoint = (setpoint + 1, setpoint)
 
-    def set_fan_mode(self, fan_mode):
+    def set_fan_mode(self, fan):
         """Set fan state."""
 
-        if fan_mode in self._fan_possible_modes_rev.keys():
+        if fan in self._fan_possible_modes_rev.keys():
             self.device.thermostatSetpointStatus = "TemporaryHold"
-            self.device.fanMode = self._fan_possible_modes_rev[fan_mode]
+            self.device.fanMode = self._fan_possible_modes_rev[fan]
